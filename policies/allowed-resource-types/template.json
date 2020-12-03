@@ -1,0 +1,55 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "allowedResourceTypes": {
+            "type": "array",
+            "metadata": {
+                "description": "Define the resource types that are allowed"
+            }
+        },
+        "allowedAppServicePlanSkus": {
+            "type": "array",
+            "metadata": {
+                "description": "Define the SKUS that are allowed for App Service Plans"
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Allowed-resource-types",
+            "properties": {
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/a08ec900-254a-4555-9bf5-e42af04b5c5c",
+                "scope": "[concat('/subscriptions/', subscription().subscriptionId)]",
+                "notScopes": [],
+                "enforcementMode": "DoNotEnforce",
+                "description": "Specifies which resources are allowed to be made on this subscription",
+                "parameters": {
+                    "listOfResourceTypesAllowed": {
+                        "value": "[parameters('allowedResourceTypes')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Allowed-app-service-plan-sku",
+            "properties": {
+                "policyDefinitionId": "[extensionResourceId(concat('/subscriptions/', subscription().subscriptionId),'Microsoft.Authorization/policyDefinitions/', 'allowed-app-service-plan-sku')]",
+                "scope": "[concat('/subscriptions/', subscription().subscriptionId)]",
+                "notScopes": [],
+                "enforcementMode": "DoNotEnforce",
+                "description": "Specifies which SKUs are allowed to be used in an App Service Plan",
+                "parameters": {
+                    "listOfAllowedSKUs": {
+                        "value": "[parameters('allowedAppServicePlanSkus')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

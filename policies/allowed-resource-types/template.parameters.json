@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "allowedResourceTypes": {
+            "value": [
+                "microsoft.web/serverfarms",
+                "microsoft.web/sites",
+                "microsoft.web/sites/config",
+                "microsoft.web/sites/sourcecontrols",
+                "microsoft.sql/servers",
+                "microsoft.sql/servers/databases",
+                "microsoft.sql/servers/elasticpools",
+                "microsoft.sql/servers/firewallrules",
+                "microsoft.sql/servers/import",
+                "microsoft.storage/storageAccounts",
+                "microsoft.ServiceBus/namespaces",
+                "microsoft.containerregistry/registries",
+                "microsoft.containerregistry/registries/webhooks",
+                "microsoft.containerregistry/registries/tasks"
+            ]
+        },
+        "allowedAppServicePlanSkus": {
+            "value": [
+                "B1",
+                "B2"
+            ]
+        }
+    }
+}

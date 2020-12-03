@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyDefinitions",
+            "name": "allowed-app-service-plan-sku",
+            "apiVersion": "2019-06-01",
+            "properties": {
+                "displayName": "Allowed App Service Plan SKUs",
+                "policyType": "Custom",
+                "mode": "Indexed",
+                "description": "This policy enables you to specify a set of App Service Plan SKUs that your organization can deploy.",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "App Service"
+                },
+                "parameters": {
+                    "listOfAllowedSKUs": {
+                        "type": "Array",
+                        "metadata": {
+                            "description": "The list of SKUs that can be specified for an App Service Plan.",
+                            "displayName": "Allowed SKUs"
+                        },
+                        "defaultValue": []
+                    }
+                },
+                "policyRule": {
+                    "if": {
+                        "allOf": [
+                            {
+                                "field": "type",
+                                "equals": "Microsoft.Web/serverfarms"
+                            },
+                            {
+                                "not": {
+                                    "field": "Microsoft.Web/serverfarms/sku.name",
+                                    "in": "[[parameters('listOfAllowedSKUs')]"
+                                }
+                            }
+                        ]
+                    },
+                    "then": {
+                        "effect": "Deny"
+                    }
+                }
+            }
+        }
+
+    ]
+}
